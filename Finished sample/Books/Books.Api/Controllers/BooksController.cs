@@ -14,7 +14,7 @@ namespace Books.Api.Controllers
     [ApiController]
     public class BooksController : ControllerBase
     {
-        private IBooksRepository _booksRepository;
+        private readonly IBooksRepository _booksRepository;
         private readonly IMapper _mapper;
 
         public BooksController(IBooksRepository booksRepository,

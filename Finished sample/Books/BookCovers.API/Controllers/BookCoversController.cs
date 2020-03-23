@@ -9,7 +9,9 @@ namespace BookCovers.API.Controllers
     public class BookCoversController : ControllerBase
     {
         [HttpGet("{name}")]
-        public async Task<IActionResult> GetBookCover(string name, bool returnFault = false)
+        public async Task<IActionResult> GetBookCover(
+            string name,
+            bool returnFault = false)
         {
             // if returnFault is true, wait 500ms and
             // return an Internal Server Error
@@ -21,8 +23,8 @@ namespace BookCovers.API.Controllers
 
             // generate a "book cover" (byte array) between 2 and 10MB
             var random = new Random();
-            int fakeCoverBytes = random.Next(2097152, 10485760);            
-            byte[] fakeCover = new byte[fakeCoverBytes];
+            var fakeCoverBytes = random.Next(2097152, 10485760);            
+            var fakeCover = new byte[fakeCoverBytes];
             random.NextBytes(fakeCover);
 
             return Ok(new

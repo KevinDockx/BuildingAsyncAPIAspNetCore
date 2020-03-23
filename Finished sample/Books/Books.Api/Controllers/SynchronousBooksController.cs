@@ -11,7 +11,7 @@ namespace Books.Api.Controllers
     [ApiController]
     public class SynchronousBooksController : ControllerBase
     {
-        private IBooksRepository _booksRepository;
+        private readonly IBooksRepository _booksRepository;
 
         public SynchronousBooksController(IBooksRepository booksRepository)
         {

@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Books.Api.Contexts;
 using Books.Api.Entities;
 using Books.Api.ExternalModels;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
+using Microsoft.Extensions.Logging; 
 
 namespace Books.Api.Services
 {
@@ -53,7 +53,7 @@ namespace Books.Api.Services
 
         public async Task<IEnumerable<Book>> GetBooksAsync()
         {
-            await _context.Database.ExecuteSqlCommandAsync("WAITFOR DELAY '00:00:02';");
+            await _context.Database.ExecuteSqlRawAsync("WAITFOR DELAY '00:00:02';");
             return await _context.Books.Include(b => b.Author).ToListAsync();
         }
 
@@ -72,45 +72,44 @@ namespace Books.Api.Services
                    .GetAsync($"http://localhost:52644/api/bookcovers/{coverId}");
 
             if (response.IsSuccessStatusCode)
-            {
-                return JsonConvert.DeserializeObject<BookCover>(
+            { 
+                return JsonSerializer.Deserialize<BookCover>(
                     await response.Content.ReadAsStringAsync());
             }
 
             return null;
-
         }
 
-     // Piftall #3: modifying shared state
-     //   // note: using HttpClient directly for readability purposes. 
-     //   // It's better to initialize the client via _httpClientFactory, 
-     //   // eg on constructing
+        // Piftall #3: modifying shared state
+        //   // note: using HttpClient directly for readability purposes. 
+        //   // It's better to initialize the client via _httpClientFactory, 
+        //   // eg on constructing
 
-     //   private HttpClient _httpClient = new HttpClient();
+        //   private HttpClient _httpClient = new HttpClient();
 
-     //   public async Task<IEnumerable<BookCover>> DownloadBookCoverAsync(Guid bookId)
-     //   {
-     //       var bookCoverUrls = new[]
-     //       {
-     //    $"http://localhost:52644/api/bookcovers/{bookId}-dummycover1",
-     //    $"http://localhost:52644/api/bookcovers/{bookId}-dummycover2"
-     //};
+        //   public async Task<IEnumerable<BookCover>> DownloadBookCoverAsync(Guid bookId)
+        //   {
+        //       var bookCoverUrls = new[]
+        //       {
+        //    $"http://localhost:52644/api/bookcovers/{bookId}-dummycover1",
+        //    $"http://localhost:52644/api/bookcovers/{bookId}-dummycover2"
+        //};
 
-     //       var bookCovers = new List<BookCover>();
-     //       var downloadTask1 = DownloadBookCoverAsync(bookCoverUrls[0], bookCovers);
-     //       var downloadTask2 = DownloadBookCoverAsync(bookCoverUrls[1], bookCovers);
-     //       await Task.WhenAll(downloadTask1, downloadTask2);
-     //       return bookCovers;
-     //   }
+        //       var bookCovers = new List<BookCover>();
+        //       var downloadTask1 = DownloadBookCoverAsync(bookCoverUrls[0], bookCovers);
+        //       var downloadTask2 = DownloadBookCoverAsync(bookCoverUrls[1], bookCovers);
+        //       await Task.WhenAll(downloadTask1, downloadTask2);
+        //       return bookCovers;
+        //   }
 
-     //   private async Task DownloadBookCoverAsync(string bookCoverUrl, List<BookCover> bookCovers)
-     //   {
-     //       var response = await _httpClient.GetAsync(bookCoverUrl);
-     //       var bookCover = JsonConvert.DeserializeObject<BookCover>(
-     //               await response.Content.ReadAsStringAsync());
+        //   private async Task DownloadBookCoverAsync(string bookCoverUrl, List<BookCover> bookCovers)
+        //   {
+        //       var response = await _httpClient.GetAsync(bookCoverUrl);
+        //       var bookCover = JsonSerializer.Deserialize<BookCover>(
+        //               await response.Content.ReadAsStringAsync());
 
-     //       bookCovers.Add(bookCover);
-     //   }
+        //       bookCovers.Add(bookCover);
+        //   }
 
 
         public async Task<IEnumerable<BookCover>> GetBookCoversAsync(Guid bookId)
@@ -136,7 +135,7 @@ namespace Books.Api.Services
 
             //    if (response.IsSuccessStatusCode)
             //    {
-            //        bookCovers.Add(JsonConvert.DeserializeObject<BookCover>(
+            //        bookCovers.Add(JsonSerializer.Deserialize<BookCover>(
             //            await response.Content.ReadAsStringAsync()));
             //    }
             //}
@@ -181,7 +180,7 @@ namespace Books.Api.Services
 
             if (response.IsSuccessStatusCode)
             {
-                var bookCover = JsonConvert.DeserializeObject<BookCover>(
+                var bookCover = JsonSerializer.Deserialize<BookCover>(
                     await response.Content.ReadAsStringAsync());
                 return bookCover;
             }
@@ -191,11 +190,9 @@ namespace Books.Api.Services
             return null;
         }
 
-
-
         public IEnumerable<Book> GetBooks()
         {
-            _context.Database.ExecuteSqlCommand("WAITFOR DELAY '00:00:02';");
+            _context.Database.ExecuteSqlRaw("WAITFOR DELAY '00:00:02';");
             return _context.Books.Include(b => b.Author).ToList();
         }
 
@@ -237,7 +234,5 @@ namespace Books.Api.Services
                 }
             }
         }
-
-
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.Threading;
+﻿using System.Diagnostics;
 
 namespace Books.Legacy
 {
@@ -20,7 +18,6 @@ namespace Books.Legacy
                     break;
                 } 
             }
-
             return 42;
         } 
     }

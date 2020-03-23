@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Books.Api.Filters
@@ -21,8 +20,9 @@ namespace Books.Api.Filters
                 await next();
                 return;
             }
-            
-            resultFromAction.Value = Mapper.Map<Models.Book>(resultFromAction.Value);
+
+            var mapper = context.HttpContext.RequestServices.GetRequiredService<IMapper>();
+            resultFromAction.Value = mapper.Map<Models.Book>(resultFromAction.Value);
 
             await next();
         }
