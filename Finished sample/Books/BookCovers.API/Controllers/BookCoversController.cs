@@ -13,11 +13,11 @@ namespace BookCovers.API.Controllers
             string name,
             bool returnFault = false)
         {
-            // if returnFault is true, wait 500ms and
+            // if returnFault is true, wait 100ms and
             // return an Internal Server Error
             if (returnFault)
             {
-                await Task.Delay(500);
+                await Task.Delay(100);
                 return new StatusCodeResult(500);
             }
 
