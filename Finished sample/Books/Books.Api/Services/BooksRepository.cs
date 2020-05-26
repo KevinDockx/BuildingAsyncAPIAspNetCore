@@ -74,7 +74,11 @@ namespace Books.Api.Services
             if (response.IsSuccessStatusCode)
             { 
                 return JsonSerializer.Deserialize<BookCover>(
-                    await response.Content.ReadAsStringAsync());
+                    await response.Content.ReadAsStringAsync(),
+                    new JsonSerializerOptions()
+                    { 
+                        PropertyNameCaseInsensitive = true
+                    });
             }
 
             return null;
@@ -87,29 +91,33 @@ namespace Books.Api.Services
 
         //   private HttpClient _httpClient = new HttpClient();
 
-        //   public async Task<IEnumerable<BookCover>> DownloadBookCoverAsync(Guid bookId)
-        //   {
-        //       var bookCoverUrls = new[]
-        //       {
+        //public async Task<IEnumerable<BookCover>> DownloadBookCoverAsync(Guid bookId)
+        //{
+        //    var bookCoverUrls = new[]
+        //    {
         //    $"http://localhost:52644/api/bookcovers/{bookId}-dummycover1",
         //    $"http://localhost:52644/api/bookcovers/{bookId}-dummycover2"
         //};
 
-        //       var bookCovers = new List<BookCover>();
-        //       var downloadTask1 = DownloadBookCoverAsync(bookCoverUrls[0], bookCovers);
-        //       var downloadTask2 = DownloadBookCoverAsync(bookCoverUrls[1], bookCovers);
-        //       await Task.WhenAll(downloadTask1, downloadTask2);
-        //       return bookCovers;
-        //   }
+        //    var bookCovers = new List<BookCover>();
+        //    var downloadTask1 = DownloadBookCoverAsync(bookCoverUrls[0], bookCovers);
+        //    var downloadTask2 = DownloadBookCoverAsync(bookCoverUrls[1], bookCovers);
+        //    await Task.WhenAll(downloadTask1, downloadTask2);
+        //    return bookCovers;
+        //}
 
-        //   private async Task DownloadBookCoverAsync(string bookCoverUrl, List<BookCover> bookCovers)
-        //   {
-        //       var response = await _httpClient.GetAsync(bookCoverUrl);
-        //       var bookCover = JsonSerializer.Deserialize<BookCover>(
-        //               await response.Content.ReadAsStringAsync());
+        //private async Task DownloadBookCoverAsync(string bookCoverUrl, List<BookCover> bookCovers)
+        //{
+        //    var response = await _httpClient.GetAsync(bookCoverUrl);
+        //    var bookCover = JsonSerializer.Deserialize<BookCover>(
+        //            await response.Content.ReadAsStringAsync(),
+        //            new JsonSerializerOptions()
+        //            {
+        //                PropertyNameCaseInsensitive = true
+        //            });
 
-        //       bookCovers.Add(bookCover);
-        //   }
+        //    bookCovers.Add(bookCover);
+        //}
 
 
         public async Task<IEnumerable<BookCover>> GetBookCoversAsync(Guid bookId)
@@ -136,7 +144,11 @@ namespace Books.Api.Services
             //    if (response.IsSuccessStatusCode)
             //    {
             //        bookCovers.Add(JsonSerializer.Deserialize<BookCover>(
-            //            await response.Content.ReadAsStringAsync()));
+            //            await response.Content.ReadAsStringAsync(),
+            //            new JsonSerializerOptions()
+            //            {
+            //                PropertyNameCaseInsensitive = true
+            //            })));
             //    }
             //}
 
@@ -181,7 +193,11 @@ namespace Books.Api.Services
             if (response.IsSuccessStatusCode)
             {
                 var bookCover = JsonSerializer.Deserialize<BookCover>(
-                    await response.Content.ReadAsStringAsync());
+                    await response.Content.ReadAsStringAsync(),
+                    new JsonSerializerOptions()
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
                 return bookCover;
             }
 
